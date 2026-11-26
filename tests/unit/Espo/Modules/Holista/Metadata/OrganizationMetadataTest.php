@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace tests\unit\Espo\Modules\Holista\Metadata;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -140,24 +141,54 @@ class OrganizationMetadataTest extends TestCase
     }
 
     /**
-     * @dataProvider layoutProvider
+     * A list layout is a flat array of cells; a detail layout is an array of rows,
+     * each row an array of cells. Flatten both into a single cell list.
+     *
+     * @param array<int|string, mixed> $layout
+     * @return array<int, array<string, mixed>>
      */
+    private static function cells(array $layout): array
+    {
+        $cells = [];
+
+        foreach ($layout as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            if (array_is_list($row)) {
+                foreach ($row as $cell) {
+                    if (is_array($cell)) {
+                        $cells[] = $cell;
+                    }
+                }
+
+                continue;
+            }
+
+            $cells[] = $row;
+        }
+
+        return $cells;
+    }
+
+    #[DataProvider('layoutProvider')]
     public function testLayoutsOnlyReferenceDeclaredFields(string $layout): void
     {
-        $rows = self::metadata('layouts/' . self::ENTITY, $layout);
+        $cells = self::cells(self::metadata('layouts/' . self::ENTITY, $layout));
         $declared = array_merge(array_keys(self::fields()), ['id']);
 
-        foreach ($rows as $row) {
-            foreach ((array) $row as $cell) {
-                $name = $cell['name'] ?? null;
+        $this->assertNotEmpty($cells, 'Layout "' . $layout . '" has no cells.');
 
-                $this->assertNotNull($name, 'Layout cell without a name in ' . $layout . '.');
-                $this->assertContains(
-                    $name,
-                    $declared,
-                    'Layout "' . $layout . '" references undeclared field "' . $name . '".'
-                );
-            }
+        foreach ($cells as $cell) {
+            $name = $cell['name'] ?? null;
+
+            $this->assertNotNull($name, 'Layout cell without a name in ' . $layout . '.');
+            $this->assertContains(
+                $name,
+                $declared,
+                'Layout "' . $layout . '" references undeclared field "' . $name . '".'
+            );
         }
     }
 
@@ -172,9 +203,7 @@ class OrganizationMetadataTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider localeProvider
-     */
+    #[DataProvider('localeProvider')]
     public function testTranslationsCoverEveryField(string $locale): void
     {
         $translation = self::translation($locale);
@@ -199,9 +228,7 @@ class OrganizationMetadataTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider localeProvider
-     */
+    #[DataProvider('localeProvider')]
     public function testEveryKindOptionIsTranslated(string $locale): void
     {
         $translation = self::translation($locale);
