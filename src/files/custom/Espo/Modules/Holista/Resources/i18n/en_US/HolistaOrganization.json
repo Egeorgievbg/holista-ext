@@ -1,0 +1,33 @@
+{
+    "labels": {
+        "Create HolistaOrganization": "Create Organization",
+        "HolistaOrganization": "Organization",
+        "HolistaOrganizations": "Organizations"
+    },
+    "fields": {
+        "name": "Name",
+        "legacyId": "Source ID",
+        "sourceSystem": "Source system",
+        "sourceRecordKey": "Source record key",
+        "migrationBatchId": "Migration batch",
+        "organizationKind": "Kind",
+        "classificationRaw": "Kind / basis (raw)",
+        "note": "Note",
+        "sourceRef": "Source reference",
+        "qaStatus": "QA status",
+        "accounts": "Sites"
+    },
+    "links": {
+        "accounts": "Sites"
+    },
+    "options": {
+        "organizationKind": {
+            "NationalChain": "National chain",
+            "RegionalChain": "Regional chain",
+            "LocalChain": "Local chain",
+            "LocalMultiSite": "Local multi-site",
+            "NationalOwnershipGroup": "National ownership group",
+            "MasterGroup": "Master group"
+        }
+    }
+}

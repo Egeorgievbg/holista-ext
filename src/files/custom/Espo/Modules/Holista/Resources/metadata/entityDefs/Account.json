@@ -1,0 +1,16 @@
+{
+    "fields": {
+        "group": {
+            "type": "link",
+            "entity": "HolistaOrganization",
+            "foreign": "accounts"
+        }
+    },
+    "links": {
+        "group": {
+            "type": "belongsTo",
+            "entity": "HolistaOrganization",
+            "foreign": "accounts"
+        }
+    }
+}

@@ -1,0 +1,6 @@
+[
+    {"name": "name", "link": true},
+    {"name": "organizationKind", "width": 22},
+    {"name": "classificationRaw", "width": 26},
+    {"name": "qaStatus", "width": 20}
+]

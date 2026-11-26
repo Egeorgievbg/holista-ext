@@ -1,0 +1,33 @@
+{
+    "labels": {
+        "Create HolistaOrganization": "Създай организация",
+        "HolistaOrganization": "Организация",
+        "HolistaOrganizations": "Организации"
+    },
+    "fields": {
+        "name": "Наименование",
+        "legacyId": "ID от източника",
+        "sourceSystem": "Източник",
+        "sourceRecordKey": "Ключ в източника",
+        "migrationBatchId": "Партида на миграция",
+        "organizationKind": "Вид",
+        "classificationRaw": "Вид / основание (оригинал)",
+        "note": "Бележка",
+        "sourceRef": "Референция към източника",
+        "qaStatus": "QA статус",
+        "accounts": "Обекти"
+    },
+    "links": {
+        "accounts": "Обекти"
+    },
+    "options": {
+        "organizationKind": {
+            "NationalChain": "Национална верига",
+            "RegionalChain": "Регионална верига",
+            "LocalChain": "Локална верига",
+            "LocalMultiSite": "Локална, няколко обекта",
+            "NationalOwnershipGroup": "Национална група на собственост",
+            "MasterGroup": "Група от master"
+        }
+    }
+}
