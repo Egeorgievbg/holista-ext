@@ -1,0 +1,14 @@
+{
+    "module": "Holista",
+    "name": "Holista",
+    "description": "Holista field sales domain model for EspoCRM.",
+    "author": "Evgeni Georgiev",
+    "bundled": true,
+    "acceptableVersions": [
+        ">=10.1.4 <11.0.0"
+    ],
+    "php": [
+        ">=8.4 <8.6"
+    ],
+    "scripts": []
+}

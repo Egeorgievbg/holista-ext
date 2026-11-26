@@ -1,0 +1,16 @@
+{
+    "name": "espocrm/ext-holista",
+    "require": {
+        "php": ">=8.4 <8.6"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Espo\\Modules\\Holista\\": "src/files/custom/Espo/Modules/Holista",
+            "tests\\unit\\Espo\\Modules\\Holista\\": "tests/unit/Espo/Modules/Holista"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.5",
+        "phpstan/phpstan": "^2.1"
+    }
+}
