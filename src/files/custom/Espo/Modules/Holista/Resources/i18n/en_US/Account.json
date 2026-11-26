@@ -1,0 +1,17 @@
+{
+    "fields": {
+        "group": "Organization",
+        "canonicalSite": "Canonical site",
+        "aliases": "Duplicate records",
+        "aliasReason": "Reason for duplication",
+        "aliasVerifiedAt": "Verified on"
+    },
+    "links": {
+        "canonicalSite": "Canonical site",
+        "aliases": "Duplicate records"
+    },
+    "tooltips": {
+        "canonicalSite": "This record duplicates another one. Point it at the real site; the history stays on its own record.",
+        "aliases": "Records that point at this site as their canonical record."
+    }
+}

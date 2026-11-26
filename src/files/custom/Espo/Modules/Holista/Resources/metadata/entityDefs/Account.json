@@ -4,6 +4,25 @@
             "type": "link",
             "entity": "HolistaOrganization",
             "foreign": "accounts"
+        },
+        "canonicalSite": {
+            "type": "link",
+            "entity": "Account",
+            "foreign": "aliases"
+        },
+        "aliases": {
+            "type": "link",
+            "entity": "Account",
+            "foreign": "canonicalSite",
+            "layoutDetailDisabled": true,
+            "layoutMassUpdateDisabled": true
+        },
+        "aliasReason": {
+            "type": "varchar",
+            "maxLength": 255
+        },
+        "aliasVerifiedAt": {
+            "type": "date"
         }
     },
     "links": {
@@ -11,6 +30,17 @@
             "type": "belongsTo",
             "entity": "HolistaOrganization",
             "foreign": "accounts"
+        },
+        "canonicalSite": {
+            "type": "belongsTo",
+            "entity": "Account",
+            "foreign": "aliases"
+        },
+        "aliases": {
+            "type": "hasMany",
+            "entity": "Account",
+            "foreign": "canonicalSite",
+            "layoutRelationshipsDisabled": true
         }
     }
 }
