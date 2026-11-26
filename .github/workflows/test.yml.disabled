@@ -1,3 +1,10 @@
+﻿# Disabled: GitHub Actions jobs on this account are rejected at registration with a billing lock
+# ("The job was not started because your account is locked due to a billing issue"), so this
+# workflow would never run and a green check would be theatre.
+#
+# Verification lives in tools/verify.sh instead. Rename this file back to test.yml once the
+# billing issue is resolved and the workflow becomes meaningful again.
+
 name: Test
 
 on:

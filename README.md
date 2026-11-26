@@ -67,6 +67,32 @@ Without a PHP runtime, the same metadata invariants can be checked with:
 python tools/check_metadata.py
 ```
 
+`tools/verify.sh` runs both PHP checks in one go — see the next section.
+
+## Verify
+
+One command, no CI service required:
+
+```bash
+composer install && ./tools/verify.sh        # local toolchain
+```
+
+or, without PHP on the machine, run the same checks inside the running EspoCRM container
+(same PHP version as production, PHARs fetched there):
+
+```bash
+VERIFY_RAILWAY_ARGS="-p <project-id> -e <env-id> -s EspoCRM" ./tools/verify.sh
+```
+
+`tools/verify.sh` runs PHPStan at level 8 and the unit suite, and exits non-zero if either fails.
+`tools/verify-remote.sh` is the part that executes inside the container; `tools/verify-bootstrap.php`
+provides the PSR-4 autoloader when Composer is not in play.
+
+**Why not GitHub Actions.** Jobs on this account are rejected at registration
+(`The job was not started because your account is locked due to a billing issue`), so the workflow
+would never run and the green check would be theatre. `.github/workflows/test.yml.disabled` is kept
+for the day billing is sorted out — rename it back and CI works as before.
+
 ## Install on an instance
 
 1. Build the ZIP: `npm run extension`.
@@ -85,6 +111,8 @@ src/scripts/                               AfterInstall / AfterUninstall hooks
 tests/unit/Espo/Modules/Holista/           PHPUnit: metadata invariants
 tests/integration/Espo/Modules/Holista/    integration tests (need a built instance)
 tools/check_metadata.py                    dependency-free metadata checker
+tools/verify.sh                            PHPStan + PHPUnit, locally or in the container
+tools/verify-remote.sh                     the part that runs inside the container
 tools/scaffold.py                          reproducible record of the template initialization
 ```
 
