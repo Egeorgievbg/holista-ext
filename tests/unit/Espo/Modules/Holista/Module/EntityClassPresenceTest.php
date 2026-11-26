@@ -135,4 +135,47 @@ class EntityClassPresenceTest extends TestCase
             );
         }
     }
+
+    /**
+     * Tab labels come from Global.json scopeNames, not from the entity i18n labels. Without them the
+     * menu shows the raw entity type, e.g. "HolistaOrganization" next to "Клиенти".
+     *
+     * @dataProvider localeProvider
+     */
+    #[DataProvider('localeProvider')]
+    public function testScopeNamesAreTranslated(string $locale): void
+    {
+        $file = self::modulePath() . '/Resources/i18n/' . $locale . '/Global.json';
+
+        $this->assertFileExists($file, $locale . ' is missing the scope name translations.');
+
+        $decoded = json_decode((string) file_get_contents($file), true);
+
+        $this->assertIsArray($decoded);
+
+        foreach (array_keys(self::entityScopes()) as $entityType) {
+            $this->assertArrayHasKey(
+                $entityType,
+                $decoded['scopeNames'] ?? [],
+                $locale . ' is missing scopeNames.' . $entityType . ' - the menu would show the raw name.'
+            );
+
+            $this->assertArrayHasKey(
+                $entityType,
+                $decoded['scopeNamesPlural'] ?? [],
+                $locale . ' is missing scopeNamesPlural.' . $entityType . ' - list titles would show the raw name.'
+            );
+        }
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function localeProvider(): array
+    {
+        return [
+            'bg_BG' => ['bg_BG'],
+            'en_US' => ['en_US'],
+        ];
+    }
 }
