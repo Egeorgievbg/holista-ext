@@ -1,0 +1,14 @@
+{
+    "controller": "controllers/record",
+    "iconClass": "fas fa-sitemap",
+    "boolFilterList": [
+        "onlyMy"
+    ],
+    "relationshipPanels": {
+        "accounts": {
+            "create": false,
+            "select": false,
+            "rowActionsView": "views/record/row-actions/relationship-no-unlink"
+        }
+    }
+}

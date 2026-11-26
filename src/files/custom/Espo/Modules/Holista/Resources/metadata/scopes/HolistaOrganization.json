@@ -1,0 +1,12 @@
+{
+    "module": "Holista",
+    "entity": true,
+    "object": true,
+    "acl": true,
+    "tab": true,
+    "importable": true,
+    "layouts": true,
+    "stream": true,
+    "customizable": false,
+    "iconClass": "fas fa-sitemap"
+}

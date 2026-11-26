@@ -1,0 +1,90 @@
+{
+    "fields": {
+        "name": {
+            "type": "varchar",
+            "maxLength": 255,
+            "required": true,
+            "trim": true
+        },
+        "legacyId": {
+            "type": "varchar",
+            "maxLength": 64
+        },
+        "sourceSystem": {
+            "type": "varchar",
+            "maxLength": 50,
+            "default": "HOLISTA-v3",
+            "readOnly": true
+        },
+        "sourceRecordKey": {
+            "type": "varchar",
+            "maxLength": 255,
+            "readOnly": true
+        },
+        "migrationBatchId": {
+            "type": "varchar",
+            "maxLength": 64,
+            "readOnly": true
+        },
+        "organizationKind": {
+            "type": "enum",
+            "options": [
+                "NationalChain",
+                "RegionalChain",
+                "LocalChain",
+                "LocalMultiSite",
+                "NationalOwnershipGroup",
+                "MasterGroup"
+            ],
+            "default": null
+        },
+        "classificationRaw": {
+            "type": "varchar",
+            "maxLength": 255,
+            "readOnly": true
+        },
+        "note": {
+            "type": "text"
+        },
+        "sourceRef": {
+            "type": "text",
+            "readOnly": true
+        },
+        "qaStatus": {
+            "type": "varchar",
+            "maxLength": 64,
+            "default": "IMPORTED_UNVERIFIED"
+        },
+        "accounts": {
+            "type": "link",
+            "entity": "Account",
+            "foreign": "group",
+            "layoutDetailDisabled": true,
+            "layoutMassUpdateDisabled": true
+        }
+    },
+    "links": {
+        "accounts": {
+            "type": "hasMany",
+            "entity": "Account",
+            "foreign": "group",
+            "layoutRelationshipsDisabled": true
+        }
+    },
+    "collection": {
+        "orderBy": "name",
+        "order": "asc",
+        "textFilterFields": [
+            "name",
+            "classificationRaw"
+        ]
+    },
+    "indexes": {
+        "legacyId": {
+            "columns": [
+                "legacyId",
+                "deleted"
+            ]
+        }
+    }
+}
