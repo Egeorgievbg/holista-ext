@@ -46,17 +46,17 @@ class OrganizationMetadataTest extends TestCase
     /**
      * @return array<string, mixed>
      */
-    private static function translation(string $locale): array
+    private static function translation(string $locale, string $entity = self::ENTITY): array
     {
-        return self::decode(self::resourcesPath() . '/i18n/' . $locale . '/' . self::ENTITY . '.json');
+        return self::decode(self::resourcesPath() . '/i18n/' . $locale . '/' . $entity . '.json');
     }
 
     /**
      * @return array<string, array<string, mixed>>
      */
-    private static function fields(): array
+    private static function fields(string $entity = self::ENTITY): array
     {
-        return self::metadata('entityDefs', self::ENTITY)['fields'];
+        return self::metadata('entityDefs', $entity)['fields'];
     }
 
     public function testScopeMakesItARecordEntity(): void
@@ -138,6 +138,55 @@ class OrganizationMetadataTest extends TestCase
 
         $this->assertSame('link', $accountDefs['fields']['group']['type']);
         $this->assertSame(self::ENTITY, $accountDefs['fields']['group']['entity']);
+    }
+
+    public function testAccountAliasLinkIsSymmetrical(): void
+    {
+        $accountDefs = self::metadata('entityDefs', 'Account');
+
+        $this->assertSame('belongsTo', $accountDefs['links']['canonicalSite']['type']);
+        $this->assertSame('Account', $accountDefs['links']['canonicalSite']['entity']);
+        $this->assertSame('aliases', $accountDefs['links']['canonicalSite']['foreign']);
+
+        $this->assertSame('hasMany', $accountDefs['links']['aliases']['type']);
+        $this->assertSame('Account', $accountDefs['links']['aliases']['entity']);
+        $this->assertSame('canonicalSite', $accountDefs['links']['aliases']['foreign']);
+
+        $this->assertSame('link', $accountDefs['fields']['canonicalSite']['type']);
+        $this->assertSame('link', $accountDefs['fields']['aliases']['type']);
+    }
+
+    public function testAccountLinkFieldsMatchTheirLinkDefinitions(): void
+    {
+        $accountDefs = self::metadata('entityDefs', 'Account');
+        $links = $accountDefs['links'];
+
+        foreach ($accountDefs['fields'] as $name => $field) {
+            if ('link' !== ($field['type'] ?? null)) {
+                continue;
+            }
+
+            $this->assertArrayHasKey($name, $links, 'Account link field "' . $name . '" has no entry in links.');
+            $this->assertSame($field['entity'], $links[$name]['entity'] ?? null);
+            $this->assertSame($field['foreign'] ?? null, $links[$name]['foreign'] ?? null);
+        }
+    }
+
+    public function testAccountAliasFieldsAreTranslated(): void
+    {
+        $expected = ['group', 'canonicalSite', 'aliases', 'aliasReason', 'aliasVerifiedAt'];
+
+        foreach (['bg_BG', 'en_US'] as $locale) {
+            $translation = self::translation($locale, 'Account');
+
+            foreach ($expected as $name) {
+                $this->assertArrayHasKey(
+                    $name,
+                    $translation['fields'],
+                    $locale . ' is missing a label for Account.' . $name . '.'
+                );
+            }
+        }
     }
 
     /**

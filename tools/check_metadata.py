@@ -73,6 +73,33 @@ check(acc_links.get("entity") == ENTITY, "Account.group must point at HolistaOrg
 check(acc_links.get("foreign") == "accounts", "Account.group.foreign must be accounts")
 check(acc_fields.get("type") == "link", "Account.group field must be a link")
 
+# Account self-referencing alias pair (site duplicates), enforced by AliasGuard at runtime.
+acc_field_map = account.get("fields") or {}
+acc_link_map = account.get("links") or {}
+for name, field in acc_field_map.items():
+    if field.get("type") != "link":
+        continue
+    check(name in acc_link_map, f'Account link field "{name}" has no links entry')
+    if name in acc_link_map:
+        check(field.get("entity") == acc_link_map[name].get("entity"),
+              f'Account."{name}" entity mismatch')
+        check(field.get("foreign") == acc_link_map[name].get("foreign"),
+              f'Account."{name}" foreign mismatch')
+check(acc_link_map.get("canonicalSite", {}).get("type") == "belongsTo",
+      "Account.canonicalSite must be belongsTo")
+check(acc_link_map.get("canonicalSite", {}).get("foreign") == "aliases",
+      "Account.canonicalSite.foreign must be aliases")
+check(acc_link_map.get("aliases", {}).get("type") == "hasMany",
+      "Account.aliases must be hasMany")
+check(acc_link_map.get("aliases", {}).get("foreign") == "canonicalSite",
+      "Account.aliases.foreign must be canonicalSite")
+
+for locale in ("bg_BG", "en_US"):
+    acc_tr = load(RES / f"i18n/{locale}/Account.json") or {}
+    for name in acc_field_map:
+        check(name in (acc_tr.get("fields") or {}),
+              f'{locale} missing label for Account.{name}')
+
 declared = set(fields) | {"id"}
 for layout in ("list", "detail"):
     rows = load(RES / f"metadata/layouts/{ENTITY}/{layout}.json") or []
